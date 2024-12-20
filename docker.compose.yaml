@@ -1,0 +1,15 @@
+name: dufs-broker
+services:
+  app:
+    image: allape/dufs-broker:latest
+    container_name: dufs-broker
+    restart: unless-stopped
+    volumes:
+      - ./root.crt:/certs/ca.crt
+    ports:
+      - "2021:2021"
+      - "50000:50000"
+    environment:
+      DUBROKER_DUFS_SERVER: "http://localhost:5000"
+      DUBROKER_ADDRESS: ":2021"
+      DUBROKER_TRUSTED_CERTS: "/certs/ca.crt"

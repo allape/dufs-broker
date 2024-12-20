@@ -4,6 +4,7 @@ import (
 	"crypto/tls"
 	_ "embed"
 	"fmt"
+	"github.com/allape/dufs-broker/env"
 	"github.com/allape/dufs-broker/ipnet"
 	vfs "github.com/allape/go-http-vfs"
 	"github.com/allape/gogger"
@@ -63,10 +64,12 @@ type DufsDriver struct {
 
 func (d *DufsDriver) GetSettings() (*ftpserver.Settings, error) {
 	return &ftpserver.Settings{
-		ListenAddr:          d.addr,
-		ConnectionTimeout:   30,
-		Banner:              Banner,
-		DefaultTransferType: ftpserver.TransferTypeBinary,
+		ListenAddr: d.addr,
+		Banner:     Banner,
+		PassiveTransferPortRange: &ftpserver.PortRange{
+			Start: env.FTPTransferPort,
+			End:   env.FTPTransferPort + 1,
+		},
 	}, nil
 }
 

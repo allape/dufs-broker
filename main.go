@@ -2,6 +2,7 @@ package main
 
 import (
 	"crypto/tls"
+	"github.com/allape/dufs-broker/env"
 	"github.com/allape/dufs-broker/ftp"
 	vfs "github.com/allape/go-http-vfs"
 	"github.com/allape/gogger"
@@ -16,7 +17,7 @@ var l = gogger.New("main")
 
 func main() {
 	if len(os.Args) >= 2 {
-		DufsServer = os.Args[1]
+		env.DufsServer = os.Args[1]
 	}
 
 	err := gogger.InitFromEnv()
@@ -24,16 +25,18 @@ func main() {
 		l.Error().Fatalf("Failed to initialize logger: %v", err)
 	}
 
-	if DufsServer == "" {
+	if env.DufsServer == "" {
 		l.Error().Fatalf("Dufs Server Address is required")
 	}
 
-	u, err := url.Parse(DufsServer)
+	l.Info().Println("Dufs Server:", env.DufsServer)
+
+	u, err := url.Parse(env.DufsServer)
 	if err != nil {
 		l.Error().Fatalf("Failed to parse DufsServer URL: %v", err)
 	}
 
-	caCertPool, err := TrustedCertsPoolFromEnv()
+	caCertPool, err := env.TrustedCertsPoolFromEnv()
 	if err != nil {
 		l.Error().Fatalf("Failed to create TrustedCertsPool: %v", err)
 	}
@@ -41,7 +44,7 @@ func main() {
 		RootCAs: caCertPool,
 	}
 
-	dufs, err := vfs.NewDufsVFS(DufsServer)
+	dufs, err := vfs.NewDufsVFS(env.DufsServer)
 	if err != nil {
 		l.Error().Fatalf("Failed to create DufsVFS: %v", err)
 	}
@@ -50,7 +53,14 @@ func main() {
 	}
 	dufs.SetLogger(gogger.New("dufs").Debug())
 
-	err = ftp.Start(Addr, u, dufs)
+	ok, _ := dufs.Online(nil)
+	if !ok {
+		l.Warn().Println("Dufs server is offline for now")
+	} else {
+		l.Info().Println("Dufs server is online")
+	}
+
+	err = ftp.Start(env.Addr, u, dufs)
 	if err != nil {
 		l.Error().Fatalf("Failed to start FTP server: %v", err)
 	}
