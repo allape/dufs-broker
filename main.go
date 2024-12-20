@@ -2,17 +2,12 @@ package main
 
 import (
 	"crypto/tls"
-	"fmt"
 	vfs "github.com/allape/go-http-vfs"
 	"github.com/allape/gogger"
-	"github.com/willscott/go-nfs"
-	nfshelper "github.com/willscott/go-nfs/helpers"
-	"net"
 	"net/http"
 	"net/url"
 	"os"
 	"os/signal"
-	"strings"
 	"syscall"
 )
 
@@ -32,8 +27,7 @@ func main() {
 		l.Error().Fatalf("Dufs Server Address is required")
 	}
 
-	// TODO auth over NFS
-	_, err = url.Parse(DufsServer)
+	u, err := url.Parse(DufsServer)
 	if err != nil {
 		l.Error().Fatalf("Failed to parse DufsServer URL: %v", err)
 	}
@@ -55,58 +49,9 @@ func main() {
 	}
 	dufs.SetLogger(gogger.New("dufs").Debug())
 
-	handler := nfshelper.NewNullAuthHandler(NewBillyDufs(dufs))
-	cacheHandler := nfshelper.NewCachingHandler(handler, 999)
-
-	if strings.HasPrefix(Addr, ":") {
-		interfaces, err := net.Interfaces()
-		if err != nil {
-			l.Error().Fatalf("Failed to get interfaces: %v", err)
-		}
-
-		for _, iface := range interfaces {
-			addrs, err := iface.Addrs()
-			if err != nil {
-				l.Warn().Println("Error getting addresses for interface:", iface.Name, err)
-				continue
-			}
-
-			for _, addr := range addrs {
-				ipAddr, ok := addr.(*net.IPNet)
-				if !ok {
-					continue
-				} else if ipAddr.IP.IsMulticast() || ipAddr.IP.IsLinkLocalMulticast() || ipAddr.IP.IsLinkLocalUnicast() {
-					continue
-				}
-
-				if ipAddr.IP.To16() == nil {
-					go start(fmt.Sprintf("%s%s", ipAddr.IP, Addr), cacheHandler)
-				} else {
-					go start(fmt.Sprintf("[%s]%s", ipAddr.IP, Addr), cacheHandler)
-				}
-			}
-		}
-	} else {
-		go start(Addr, cacheHandler)
-	}
-
 	sigs := make(chan os.Signal, 1)
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
 
 	sig := <-sigs
 	l.Info().Println("Exiting with", sig)
-}
-
-func start(addr string, handler nfs.Handler) {
-	listener, err := net.Listen("tcp", addr)
-	if err != nil {
-		l.Error().Fatalf("Failed to listen: %v", err)
-	}
-
-	l.Info().Printf("Server running at %s\n", listener.Addr())
-
-	err = nfs.Serve(listener, handler)
-	if err != nil {
-		l.Error().Fatalf("Failed to serve NFS: %v", err)
-	}
 }

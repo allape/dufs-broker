@@ -13,7 +13,10 @@ require (
 require (
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/hashicorp/golang-lru/v2 v2.0.7 // indirect
+	github.com/kr/fs v0.1.0 // indirect
+	github.com/pkg/sftp v1.13.7 // indirect
 	github.com/rasky/go-xdr v0.0.0-20170124162913-1a41d1a06c93 // indirect
 	github.com/willscott/go-nfs-client v0.0.0-20240104095149-b44639837b00 // indirect
+	golang.org/x/crypto v0.31.0 // indirect
 	golang.org/x/sys v0.28.0 // indirect
 )

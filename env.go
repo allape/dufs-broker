@@ -16,7 +16,7 @@ const (
 var (
 	DufsServer   = goenv.Getenv(EnvDufsServer, "http://localhost:5000")
 	TrustedCerts = goenv.Getenv(EnvTrustedCerts, "")
-	Addr         = goenv.Getenv(EnvAddr, ":2049")
+	Addr         = goenv.Getenv(EnvAddr, "127.0.0.1:2022")
 )
 
 func TrustedCertsPoolFromEnv() (*x509.CertPool, error) {
