@@ -3,7 +3,7 @@ module github.com/allape/dufs-broker
 go 1.23.3
 
 require (
-	github.com/allape/go-http-vfs v0.0.0-20241219125548-2243b39f3bc0
+	github.com/allape/go-http-vfs v0.0.0-20241220062304-a307d36b8b3a
 	github.com/allape/goenv v0.0.0-20241202051618-ce41afb81ebf
 	github.com/allape/gogger v0.0.0-20241208090122-dda745ad2428
 	github.com/go-git/go-billy/v5 v5.6.0
