@@ -34,9 +34,9 @@ func DescriptAddress(addr string) ([]string, error) {
 				}
 
 				if ipAddr.IP.To16() == nil {
-					bindableAddrs = append(bindableAddrs, fmt.Sprintf("%s%s", ipAddr.IP, address))
+					bindableAddrs = append(bindableAddrs, fmt.Sprintf("%s%s", ipAddr.IP, addr))
 				} else {
-					bindableAddrs = append(bindableAddrs, fmt.Sprintf("[%s]%s", ipAddr.IP, address))
+					bindableAddrs = append(bindableAddrs, fmt.Sprintf("[%s]%s", ipAddr.IP, addr))
 				}
 			}
 		}

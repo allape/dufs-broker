@@ -2,6 +2,7 @@ package main
 
 import (
 	"crypto/tls"
+	"github.com/allape/dufs-broker/ftp"
 	vfs "github.com/allape/go-http-vfs"
 	"github.com/allape/gogger"
 	"net/http"
@@ -48,6 +49,11 @@ func main() {
 		TLSClientConfig: tlsConfig,
 	}
 	dufs.SetLogger(gogger.New("dufs").Debug())
+
+	err = ftp.Start(Addr, u, dufs)
+	if err != nil {
+		l.Error().Fatalf("Failed to start FTP server: %v", err)
+	}
 
 	sigs := make(chan os.Signal, 1)
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
