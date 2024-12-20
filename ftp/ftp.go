@@ -67,8 +67,8 @@ func (d *DufsDriver) GetSettings() (*ftpserver.Settings, error) {
 		ListenAddr: d.addr,
 		Banner:     Banner,
 		PassiveTransferPortRange: &ftpserver.PortRange{
-			Start: env.FTPTransferPort,
-			End:   env.FTPTransferPort + 1,
+			Start: env.FTPTransferPort - 1,
+			End:   env.FTPTransferPort,
 		},
 	}, nil
 }
