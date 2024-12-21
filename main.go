@@ -60,10 +60,12 @@ func main() {
 		l.Info().Println("Dufs server is online")
 	}
 
-	err = ftp.Start(env.Addr, u, dufs)
+	err = ftp.Start(u, dufs)
 	if err != nil {
 		l.Error().Fatalf("Failed to start FTP server: %v", err)
 	}
+
+	l.Info().Println(env.Banner)
 
 	sigs := make(chan os.Signal, 1)
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)

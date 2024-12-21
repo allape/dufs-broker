@@ -12,22 +12,12 @@ import (
 	"net/url"
 )
 
-const Banner = `
- ______   __   __  _______  _______    _______  ______    _______  ___   _  _______  ______   
-|      | |  | |  ||       ||       |  |  _    ||    _ |  |       ||   | | ||       ||    _ |  
-|  _    ||  | |  ||    ___||  _____|  | |_|   ||   | ||  |   _   ||   |_| ||    ___||   | ||  
-| | |   ||  |_|  ||   |___ | |_____   |       ||   |_||_ |  | |  ||      _||   |___ |   |_||_ 
-| |_|   ||       ||    ___||_____  |  |  _   | |    __  ||  |_|  ||     |_ |    ___||    __  |
-|       ||       ||   |     _____| |  | |_|   ||   |  | ||       ||    _  ||   |___ |   |  | |
-|______| |_______||___|    |_______|  |_______||___|  |_||_______||___| |_||_______||___|  |_|
-`
-
 const Name = "DUFS FTP Server"
 
 var l = gogger.New("ftp")
 
-func Start(addr string, u *url.URL, dufs *vfs.DufsVFS) error {
-	addrs, err := ipnet.DescriptAddress(addr)
+func Start(u *url.URL, dufs *vfs.DufsVFS) error {
+	addrs, err := ipnet.DescriptAddress(env.Addr)
 	if err != nil {
 		return err
 	}
@@ -68,9 +58,16 @@ func (d *DufsDriver) GetSettings() (*ftpserver.Settings, error) {
 		return nil, err
 	}
 
+	tlsMode := ftpserver.MandatoryEncryption
+
+	if env.TlsCertCrt == "" || env.TlsCertKey == "" {
+		tlsMode = ftpserver.ClearOrEncrypted
+	}
+
 	return &ftpserver.Settings{
-		ListenAddr: d.addr,
-		Banner:     Banner,
+		ListenAddr:  d.addr,
+		Banner:      env.Banner,
+		TLSRequired: tlsMode,
 		PassiveTransferPortRange: &ftpserver.PortRange{
 			Start: pStart,
 			End:   pEnd,
@@ -106,5 +103,22 @@ func (d *DufsDriver) AuthUser(_ ftpserver.ClientContext, user, pass string) (ftp
 }
 
 func (d *DufsDriver) GetTLSConfig() (*tls.Config, error) {
-	return nil, nil
+	var tlsConfig *tls.Config
+
+	if env.TlsCertCrt == "" || env.TlsCertKey == "" {
+		return tlsConfig, nil
+	}
+
+	l.Info().Println("Using TLS", "cert", env.TlsCertCrt, "key", env.TlsCertKey)
+
+	cert, err := tls.LoadX509KeyPair(env.TlsCertCrt, env.TlsCertKey)
+	if err != nil {
+		return nil, err
+	}
+
+	tlsConfig = &tls.Config{
+		Certificates: []tls.Certificate{cert},
+	}
+
+	return tlsConfig, nil
 }

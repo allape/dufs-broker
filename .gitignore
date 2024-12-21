@@ -4,3 +4,5 @@
 .DS_Store
 
 root.crt
+cert.crt
+cert.key
