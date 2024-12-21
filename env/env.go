@@ -15,7 +15,7 @@ const (
 	DubrokerTrustedCerts = "DUBROKER_TRUSTED_CERTS"
 	DubrokerAddr         = "DUBROKER_ADDRESS"
 
-	DubrokerFTPTransferPort = "DUBROKER_FTP_TRANSFER_PORT"
+	DubrokerFTPTransferPortRange = "DUBROKER_FTP_TRANSFER_PORT_RANGE"
 )
 
 var (
@@ -26,7 +26,7 @@ var (
 	//Addr         = goenv.Getenv(DubrokerAddr, "127.0.0.1:2022") // sftp
 	Addr = goenv.Getenv(DubrokerAddr, "127.0.0.1:2021")
 
-	FTPTransferPort = goenv.Getenv(DubrokerFTPTransferPort, 50000)
+	FTPTransferPortRange = goenv.Getenv(DubrokerFTPTransferPortRange, PortRange("50000-50100"))
 )
 
 func TrustedCertsPoolFromEnv() (*x509.CertPool, error) {

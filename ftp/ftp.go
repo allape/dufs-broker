@@ -63,12 +63,17 @@ type DufsDriver struct {
 }
 
 func (d *DufsDriver) GetSettings() (*ftpserver.Settings, error) {
+	pStart, pEnd, err := env.FTPTransferPortRange.Range()
+	if err != nil {
+		return nil, err
+	}
+
 	return &ftpserver.Settings{
 		ListenAddr: d.addr,
 		Banner:     Banner,
 		PassiveTransferPortRange: &ftpserver.PortRange{
-			Start: env.FTPTransferPort - 1,
-			End:   env.FTPTransferPort,
+			Start: pStart,
+			End:   pEnd,
 		},
 	}, nil
 }
