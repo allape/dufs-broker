@@ -6,6 +6,8 @@ github.com/allape/goenv v0.0.0-20241202051618-ce41afb81ebf h1:0TjoyW4DGTjGf1d+8N
 github.com/allape/goenv v0.0.0-20241202051618-ce41afb81ebf/go.mod h1:1E4rNqENwTNc+KMYgEndLygF3F6Uk8mREGrUPu3RiqU=
 github.com/allape/gogger v0.0.0-20241208090122-dda745ad2428 h1:W+RoD+ZjKjyV+46gVj+oMNO0c17g3whCXBk6843qM1E=
 github.com/allape/gogger v0.0.0-20241208090122-dda745ad2428/go.mod h1:bMF4nf4lEzayulJFQqBPMcC/3BCYQUvhs8OYHB3AZpI=
+github.com/allape/gohtvfs v0.0.0-20250210125608-2707ce82c590 h1:w89RhsXYuz/DRLa+hDs2SnGXQ+4BWEiosabDffTkEKQ=
+github.com/allape/gohtvfs v0.0.0-20250210125608-2707ce82c590/go.mod h1:1aWIplBnO5y4ly238XifMjYEV4kqKZEGI3YGj23glcE=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=

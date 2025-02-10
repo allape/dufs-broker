@@ -2,7 +2,7 @@ package ftp
 
 import (
 	"errors"
-	vfs "github.com/allape/go-http-vfs"
+	"github.com/allape/gohtvfs"
 	ftpserver "github.com/fclairamb/ftpserverlib"
 	"github.com/spf13/afero"
 	"os"
@@ -13,7 +13,7 @@ var NotImplemented = errors.New("not implemented")
 
 type DufsClientDriver struct {
 	ftpserver.ClientDriver
-	dufs *vfs.DufsVFS
+	dufs *gohtvfs.DufsVFS
 }
 
 func (d *DufsClientDriver) Create(name string) (afero.File, error) {
@@ -34,7 +34,7 @@ func (d *DufsClientDriver) Open(name string) (afero.File, error) {
 		return nil, err
 	}
 	return &DufsAferoFile{
-		file: file.(*vfs.DufsFile),
+		file: file.(*gohtvfs.DufsFile),
 	}, nil
 }
 
@@ -96,7 +96,7 @@ func (d *DufsClientDriver) Chtimes(_ string, _ time.Time, _ time.Time) error {
 
 type DufsAferoFile struct {
 	afero.File
-	file *vfs.DufsFile
+	file *gohtvfs.DufsFile
 }
 
 func (f *DufsAferoFile) Name() string {

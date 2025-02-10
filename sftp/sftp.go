@@ -6,8 +6,8 @@ import (
 	_ "embed"
 	"fmt"
 	"github.com/allape/dufs-broker/ipnet"
-	vfs "github.com/allape/go-http-vfs"
 	"github.com/allape/gogger"
+	"github.com/allape/gohtvfs"
 	"github.com/pkg/sftp"
 	"golang.org/x/crypto/ssh"
 	"io"
@@ -24,7 +24,7 @@ var (
 
 var l = gogger.New("sftp")
 
-func Start(addr string, u *url.URL, dufs *vfs.DufsVFS) error {
+func Start(addr string, u *url.URL, dufs *gohtvfs.DufsVFS) error {
 	config := &ssh.ServerConfig{
 		PasswordCallback: func(c ssh.ConnMetadata, pass []byte) (*ssh.Permissions, error) {
 			if c.User() == u.User.Username() {
@@ -55,7 +55,7 @@ func Start(addr string, u *url.URL, dufs *vfs.DufsVFS) error {
 	return nil
 }
 
-func start(addr string, config *ssh.ServerConfig, dufs *vfs.DufsVFS) {
+func start(addr string, config *ssh.ServerConfig, dufs *gohtvfs.DufsVFS) {
 	l.Info().Println("Starting SFTP server on", addr)
 
 	listener, err := net.Listen("tcp", addr)

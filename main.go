@@ -4,8 +4,8 @@ import (
 	"crypto/tls"
 	"github.com/allape/dufs-broker/env"
 	"github.com/allape/dufs-broker/ftp"
-	vfs "github.com/allape/go-http-vfs"
 	"github.com/allape/gogger"
+	"github.com/allape/gohtvfs"
 	"net/http"
 	"net/url"
 	"os"
@@ -44,7 +44,7 @@ func main() {
 		RootCAs: caCertPool,
 	}
 
-	dufs, err := vfs.NewDufsVFS(env.DufsServer)
+	dufs, err := gohtvfs.NewDufsVFS(env.DufsServer)
 	if err != nil {
 		l.Error().Fatalf("Failed to create DufsVFS: %v", err)
 	}

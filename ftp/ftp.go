@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"github.com/allape/dufs-broker/env"
 	"github.com/allape/dufs-broker/ipnet"
-	vfs "github.com/allape/go-http-vfs"
 	"github.com/allape/gogger"
+	"github.com/allape/gohtvfs"
 	ftpserver "github.com/fclairamb/ftpserverlib"
 	"net/url"
 )
@@ -16,7 +16,7 @@ const Name = "DUFS FTP Server"
 
 var l = gogger.New("ftp")
 
-func Start(u *url.URL, dufs *vfs.DufsVFS) error {
+func Start(u *url.URL, dufs *gohtvfs.DufsVFS) error {
 	addrs, err := ipnet.DescriptAddress(env.Addr)
 	if err != nil {
 		return err
@@ -29,7 +29,7 @@ func Start(u *url.URL, dufs *vfs.DufsVFS) error {
 	return nil
 }
 
-func start(addr string, u *url.URL, dufs *vfs.DufsVFS) {
+func start(addr string, u *url.URL, dufs *gohtvfs.DufsVFS) {
 	server := ftpserver.NewFtpServer(&DufsDriver{
 		addr: addr,
 		u:    u,
@@ -49,7 +49,7 @@ type DufsDriver struct {
 	ftpserver.MainDriver
 	addr string
 	u    *url.URL
-	dufs *vfs.DufsVFS
+	dufs *gohtvfs.DufsVFS
 }
 
 func (d *DufsDriver) GetSettings() (*ftpserver.Settings, error) {

@@ -2,8 +2,8 @@ package nfs
 
 import (
 	"github.com/allape/dufs-broker/ipnet"
-	vfs "github.com/allape/go-http-vfs"
 	"github.com/allape/gogger"
+	"github.com/allape/gohtvfs"
 	nfs2 "github.com/willscott/go-nfs"
 	nfshelper "github.com/willscott/go-nfs/helpers"
 	"net"
@@ -11,7 +11,7 @@ import (
 
 var l = gogger.New("nfs")
 
-func Start(addr string, dufs *vfs.DufsVFS) error {
+func Start(addr string, dufs *gohtvfs.DufsVFS) error {
 	handler := nfshelper.NewNullAuthHandler(NewBillyDufs(dufs))
 	cacheHandler := nfshelper.NewCachingHandler(handler, 999)
 

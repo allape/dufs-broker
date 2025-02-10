@@ -2,7 +2,7 @@ package nfs
 
 import (
 	"errors"
-	vfs "github.com/allape/go-http-vfs"
+	"github.com/allape/gohtvfs"
 	"github.com/go-git/go-billy/v5"
 	"io"
 	"net/url"
@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-func NewBillyDufs(dufs *vfs.DufsVFS) billy.Filesystem {
+func NewBillyDufs(dufs *gohtvfs.DufsVFS) billy.Filesystem {
 	return &BillyDufs{
 		dufs: dufs,
 	}
@@ -20,7 +20,7 @@ var NotImplError = errors.New("not implemented")
 
 type BillyDufs struct {
 	billy.Filesystem
-	dufs *vfs.DufsVFS
+	dufs *gohtvfs.DufsVFS
 }
 
 // region Basic
@@ -31,7 +31,7 @@ func (d BillyDufs) Create(filename string) (billy.File, error) {
 
 func (d BillyDufs) Open(filename string) (billy.File, error) {
 	file, err := d.dufs.Open(filename)
-	return &BillyDufsFile{file: file.(*vfs.DufsFile)}, err
+	return &BillyDufsFile{file: file.(*gohtvfs.DufsFile)}, err
 }
 
 func (d BillyDufs) OpenFile(filename string, _ int, _ os.FileMode) (billy.File, error) {
@@ -126,7 +126,7 @@ func (d BillyDufs) Root() string {
 
 type BillyDufsFile struct {
 	billy.File
-	file *vfs.DufsFile
+	file *gohtvfs.DufsFile
 }
 
 func (f *BillyDufsFile) Name() string {
